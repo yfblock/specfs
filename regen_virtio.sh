@@ -8,6 +8,8 @@
 #
 # First-time QEMU environment (kernel tree, bzImage, fio):
 #   ./scripts/setup-qemu-env.sh --all
+# UART16550 driver:
+#   ./regen_uart16550.sh build && ./test_uart_qemu.sh
 
 set -e
 
@@ -27,9 +29,8 @@ NC='\033[0m'
 clean_generated() {
     echo -e "${YELLOW}Cleaning generated files...${NC}"
     cd "$GEN_DIR"
-    # Remove generated .c files (keep hand-written vblk_mod.c, hw_ops.h, Makefile)
-    find . -name "*.c" ! -name "vblk_mod.c" -delete 2>/dev/null || true
-    find . -name "*.h" ! -name "hw_ops.h" -delete 2>/dev/null || true
+    rm -rf driver util virtio-core virtio-blk
+    rm -f common.h
     rm -f vblk.ko vblk.mod vblk.mod.c vblk.mod.o vblk.o .vblk.*.cmd Module.symvers modules.order
     find . -name "*.o" -delete 2>/dev/null || true
     find . -name ".*.cmd" -delete 2>/dev/null || true

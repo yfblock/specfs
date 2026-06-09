@@ -1,0 +1,11 @@
+linux/types, common
+
+void uart_hw_init(struct uart_port *port);
+int uart_startup(struct uart_port *port);
+void uart_shutdown(struct uart_port *port);
+void uart_set_termios(struct uart_port *port, struct ktermios *termios,
+		      const struct ktermios *old);
+void uart_start_tx(struct uart_port *port);
+void uart_stop_tx(struct uart_port *port);
+unsigned int uart_tx_empty(struct uart_port *port);
+irqreturn_t uart_handle_irq(int irq, void *dev_id);

@@ -1,5 +1,6 @@
 #!/bin/bash
-# Prepare QEMU test/benchmark environment for SYSSPEC virtio-blk work.
+# Prepare QEMU test/benchmark environment for SYSSPEC kernel driver work
+# (virtio-blk and uart16550).
 #
 # Downloads and extracts the Linux kernel tree (if needed), checks host
 # dependencies, and optionally builds kernel images and a static fio binary.
@@ -229,11 +230,13 @@ print_summary() {
     echo ""
     echo "Auto-generated at test time (not stored permanently):"
     echo "  data/test-disk.img, data/benchmark-disk.img"
-    echo "  data/initramfs.cpio, data/initramfs_bench.cpio"
+    echo "  data/initramfs.cpio, data/initramfs_bench.cpio, data/initramfs_uart.cpio"
     echo ""
     echo "Next steps:"
     echo "  ./regen_virtio.sh build       # generate + compile vblk.ko"
-    echo "  ./test_qemu.sh                # functional QEMU test"
+    echo "  ./test_qemu.sh                # virtio-blk QEMU test"
+    echo "  ./regen_uart16550.sh build    # generate + compile uart16550.ko"
+    echo "  ./test_uart_qemu.sh           # uart16550 QEMU test (COM2)"
     echo "  ./regen_virtio.sh benchmark   # fio performance comparison"
     echo ""
 }

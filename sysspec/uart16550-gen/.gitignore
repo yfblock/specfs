@@ -1,0 +1,17 @@
+# LLM-generated sources (reproduce via ./regen_uart16550.sh)
+common.h
+uart/
+
+# Hand-written boilerplate: uart16550_mod.c, hw_ops.h, Makefile
+
+# Kernel module build artifacts (kbuild)
+*.ko
+*.o
+*.mod
+*.mod.c
+*.mod.o
+modules.order
+Module.symvers
+.tmp_versions/
+.*.cmd
+..*.cmd

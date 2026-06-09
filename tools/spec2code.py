@@ -121,8 +121,12 @@ def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10, ds
         src_path = root_dir / "virtio-blk-spec"
     elif type == "evolve-virtio-blk":
         src_path = root_dir / "evolve-virtio-blk"
+    elif type == "uart16550":
+        src_path = root_dir / "uart16550-spec"
+    elif type == "evolve-uart16550":
+        src_path = root_dir / "evolve-uart16550"
     else:
-        logger.error(f"Unknown type: {type}. Expected 'gen', 'evolve', 'virtio-blk', or 'evolve-virtio-blk'.")
+        logger.error(f"Unknown type: {type}. Expected 'gen', 'evolve', 'virtio-blk', 'evolve-virtio-blk', 'uart16550', or 'evolve-uart16550'.")
         return
 
     dst_path = root_dir / (dst_name or "genfs")
@@ -169,7 +173,7 @@ def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10, ds
 
             orig_code = None
             orig_spec = None
-            is_evolve = type in ("evolve", "evolve-virtio-blk")
+            is_evolve = type in ("evolve", "evolve-virtio-blk", "evolve-uart16550")
             if is_evolve and output_file.exists():
                 try:
                     with open(output_file, 'r', encoding='utf-8') as f:
@@ -180,6 +184,8 @@ def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10, ds
                 # For evolve-virtio-blk, original spec is in virtio-blk-spec/
                 if type == "evolve-virtio-blk":
                     spec_path = root_dir / "virtio-blk-spec"
+                elif type == "evolve-uart16550":
+                    spec_path = root_dir / "uart16550-spec"
                 else:
                     spec_path = root_dir / "specfs"
                 orig_spec_path = spec_path / relative_path

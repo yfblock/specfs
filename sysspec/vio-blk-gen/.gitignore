@@ -1,3 +1,12 @@
+# LLM-generated sources (reproduce via ./regen_virtio.sh)
+common.h
+driver/
+util/
+virtio-core/
+virtio-blk/
+
+# Hand-written boilerplate: vblk_mod.c, hw_ops.h, Makefile
+
 # Kernel module build artifacts (kbuild)
 *.ko
 *.o

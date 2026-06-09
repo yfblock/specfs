@@ -5,3 +5,12 @@ compile_commands.json
 *.o
 
 .cache
+
+# LLM-generated sources (reproduce via uv run python gen.py gen)
+common.h
+/file/
+/inode/
+/path/
+/interface/
+/interface-util/
+/util/
