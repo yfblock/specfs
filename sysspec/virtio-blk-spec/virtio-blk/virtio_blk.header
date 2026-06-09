@@ -1,0 +1,3 @@
+common, util, virtio_core
+int blk_submit(struct virtio_blk_dev *vdev, struct request *rq);
+void blk_done(struct virtqueue *vq);

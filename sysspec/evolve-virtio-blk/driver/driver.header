@@ -1,0 +1,3 @@
+common, util, virtio_core, virtio_blk
+int blkdev_init(struct virtio_blk_dev *vdev);
+void blkdev_exit(struct virtio_blk_dev *vdev);

@@ -23,6 +23,8 @@ def generate_header_file(file_name, header_content):
         "stdbool", "stddef", "stdint", "stdio", "stdlib", "string",
         "time", "uchar", "wchar", "wctype", "unistd", "sys/syscall"
     }
+    # Treat linux/*, asm/*, uapi/* as system headers (kernel headers)
+    KERNEL_HEADER_PREFIXES = ("linux/", "asm/", "uapi/", "uapi/linux/")
 
     includes_line = lines[0]
     includes = [include.strip() for include in includes_line.split(',')]
@@ -31,7 +33,7 @@ def generate_header_file(file_name, header_content):
     for include in includes:
         if not include:
             continue
-        if include in STD_LIBS:
+        if include in STD_LIBS or any(include.startswith(p) for p in KERNEL_HEADER_PREFIXES):
             include_statements.append(f'#include <{include}.h>')
         else:
             include_statements.append(f'#include "{include}.h"')
@@ -110,16 +112,20 @@ def get_files_to_process(src_path: Path, dst_path: Path):
     
     return spec_files_to_process, header_files_to_process
 
-def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10):
+def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10, dst_name: str=None):
     if type == "gen":
         src_path = root_dir / "specfs"
     elif type == "evolve":
         src_path = root_dir / "evolvefs"
+    elif type == "virtio-blk":
+        src_path = root_dir / "virtio-blk-spec"
+    elif type == "evolve-virtio-blk":
+        src_path = root_dir / "evolve-virtio-blk"
     else:
-        logger.error(f"Unknown type: {type}. Expected 'gen' or 'evolve'.")
+        logger.error(f"Unknown type: {type}. Expected 'gen', 'evolve', 'virtio-blk', or 'evolve-virtio-blk'.")
         return
 
-    dst_path = root_dir / "genfs"
+    dst_path = root_dir / (dst_name or "genfs")
 
     if not src_path.exists():
         logger.error("specfs directory not found!")
@@ -163,14 +169,19 @@ def spec2code(root_dir: Path, logger: Logger, type: str, max_workers: int=10):
 
             orig_code = None
             orig_spec = None
-            if type == "evolve" and output_file.exists():
+            is_evolve = type in ("evolve", "evolve-virtio-blk")
+            if is_evolve and output_file.exists():
                 try:
                     with open(output_file, 'r', encoding='utf-8') as f:
                         orig_code = f.read()
                 except Exception as e:
                     logger.error(f"Error reading existing output file {output_file}: {e}")
-                
-                spec_path = root_dir / "specfs"
+
+                # For evolve-virtio-blk, original spec is in virtio-blk-spec/
+                if type == "evolve-virtio-blk":
+                    spec_path = root_dir / "virtio-blk-spec"
+                else:
+                    spec_path = root_dir / "specfs"
                 orig_spec_path = spec_path / relative_path
                 if orig_spec_path.exists():
                     try:

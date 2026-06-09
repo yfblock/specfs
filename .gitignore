@@ -9,5 +9,9 @@ dist/
 
 /log
 /result
+eval/log/
+
+# Claude Code worktrees
+.claude/
 
 .env

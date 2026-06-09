@@ -2,3 +2,20 @@ qemu-10.0.0/
 qemu-10.0.0.tar.xz
 linux-6.14.4.tar.xz
 linux-6.14.4/
+
+# Custom / benchmark kernels
+bzImage
+bzImage-*
+
+# QEMU disk images
+*.img
+
+# Initramfs cpio archives
+initramfs*.cpio
+
+# Benchmark tools and packages
+fio
+kernel.deb
+
+# QEMU session logs
+qemu-*.log
