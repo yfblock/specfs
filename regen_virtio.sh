@@ -5,6 +5,9 @@
 #   ./regen_virtio.sh              # generate + build
 #   ./regen_virtio.sh benchmark    # generate + build + run benchmark
 #   ./regen_virtio.sh clean        # clean generated files only
+#
+# First-time QEMU environment (kernel tree, bzImage, fio):
+#   ./scripts/setup-qemu-env.sh --all
 
 set -e
 
